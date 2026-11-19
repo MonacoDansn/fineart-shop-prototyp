@@ -5,8 +5,8 @@
 window.SHOP_CONFIG = {
   marke: "GILT & GRIT",          // Arbeitstitel, später durch den echten Markennamen ersetzen
   untertitel: "Fine Art Prints mit Haltung",
-  supabaseUrl: "",                // z.B. "https://abcdefgh.supabase.co"
-  supabaseAnonKey: "",            // beginnt mit "eyJ..." oder "sb_publishable_..."
+  supabaseUrl: "https://mdljgzcbrvppvqdhlhnz.supabase.co",
+  supabaseAnonKey: "sb_publishable_71cq5GJkq5AwPPAJ2Dnyvg_kCBfVZMk",  // öffentlicher Schlüssel
   preise: [
     { groesse: "30 × 40 cm", preis: 59 },
     { groesse: "50 × 70 cm", preis: 99 },

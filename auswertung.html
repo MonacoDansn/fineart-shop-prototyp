@@ -43,7 +43,7 @@
     let daten = [];
     if (C.supabaseUrl && C.supabaseAnonKey) {
       const r = await fetch(`${C.supabaseUrl}/rest/v1/bewertungen?select=*&order=erstellt_am.desc&limit=5000`,
-        { headers: { apikey: C.supabaseAnonKey, Authorization: `Bearer ${C.supabaseAnonKey}` } });
+        { headers: C.supabaseAnonKey.startsWith("eyJ") ? { apikey: C.supabaseAnonKey, Authorization: `Bearer ${C.supabaseAnonKey}` } : { apikey: C.supabaseAnonKey } });
       daten = await r.json();
       document.getElementById("info").textContent = `${daten.length} Bewertungen von ${new Set(daten.map(d => d.name || "anonym")).size} Personen (Namen, sofern angegeben)`;
     } else {

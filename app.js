@@ -22,10 +22,14 @@
   };
 
   // ---------- Supabase über REST ----------
+  // neue Schlüssel (sb_publishable_...) nur als apikey, alte JWT Schlüssel zusätzlich als Bearer
+  const kopf = () => C.supabaseAnonKey.startsWith("eyJ")
+    ? { apikey: C.supabaseAnonKey, Authorization: `Bearer ${C.supabaseAnonKey}` }
+    : { apikey: C.supabaseAnonKey };
   async function api(pfad, opt = {}) {
     const r = await fetch(`${C.supabaseUrl}/rest/v1/${pfad}`, {
       ...opt,
-      headers: { apikey: C.supabaseAnonKey, Authorization: `Bearer ${C.supabaseAnonKey}`, "Content-Type": "application/json", ...(opt.headers || {}) },
+      headers: { ...kopf(), "Content-Type": "application/json", ...(opt.headers || {}) },
     });
     if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
     return r.status === 204 || r.status === 201 ? null : r.json();

@@ -22,6 +22,10 @@ drop policy if exists "alle duerfen bewerten" on public.bewertungen;
 create policy "alle duerfen bewerten" on public.bewertungen
   for insert to anon with check (true);
 
+-- Neue Supabase Projekte vergeben keine Rechte automatisch
+grant usage on schema public to anon;
+grant select, insert on public.bewertungen to anon;
+
 -- Übersicht pro Motiv (für die Auswertung)
 create or replace view public.bewertung_uebersicht
 with (security_invoker = true) as
@@ -31,3 +35,5 @@ select motiv_id,
        count(kommentar) filter (where kommentar <> '') as kommentare
 from public.bewertungen
 group by motiv_id;
+
+grant select on public.bewertung_uebersicht to anon;
