@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <div class="banner">Prototyp · noch kein echter Verkauf · <button class="link" data-modus="bewerten">Hilf mit: Motive bewerten</button></div>
@@ -39,44 +39,42 @@
       <button data-filter="Motivation">Motivation</button>
       <button data-filter="Damals & Anders">Damals &amp; Anders</button>
       <button data-filter="After Dark">After Dark <span class="ab18">18+</span></button>
-      <span class="trenner"></span>
-      <button data-stil="Fotografie">Fotografie</button>
-      <button data-stil="Illustration">Illustration</button>
     </div>
 
-    <section id="raster" class="raster"></section>
+    <section id="raster"></section>
   </main>
 
   <!-- BEWERTEN -->
   <main id="bewerten" class="ansicht" hidden>
     <div class="bew-kopf">
-      <h2>Wie gefällt dir das Motiv?</h2>
-      <p>Gib jedem Bild eine Note wie in der Schule. Würdest du es aufhängen oder verschenken? Ein kurzer Kommentar hilft sehr.</p>
-      <label class="namensfeld">Dein Vorname (freiwillig) <input id="name" maxlength="60" autocomplete="given-name"></label>
+      <div class="bew-zeile">
+        <p id="zaehler" class="klein"></p>
+        <label class="namensfeld">Vorname <input id="name" maxlength="60" autocomplete="given-name" placeholder="freiwillig"></label>
+      </div>
       <div class="fortschritt"><div id="balken"></div></div>
-      <p id="zaehler" class="klein"></p>
     </div>
 
     <article id="karte" class="bew-karte">
-      <div class="bew-bild"><img id="bew-img" alt=""></div>
+      <div class="bew-bild" id="bew-bild">
+        <img id="bew-img" alt="">
+        <button id="zeig-motiv" class="bild-knopf" title="Ohne Rahmen ansehen">Ohne Rahmen</button>
+        <div id="ergebnis" class="ergebnis" aria-live="polite">
+          <div class="skala">
+            <div class="skala-linie"></div>
+            <div class="marke-du" id="marke-du"><span>Du</span></div>
+            <div class="marke-andere" id="marke-andere"><span id="andere-label">Ø andere</span></div>
+          </div>
+          <div id="erg-balken" class="erg-balken"></div>
+          <p id="erg-text" class="erg-text"></p>
+          <p class="erg-tipp">Tippen für weiter</p>
+        </div>
+      </div>
       <div class="bew-seite">
         <p class="klein" id="bew-linie"></p>
         <h3 id="bew-titel"></h3>
-        <div class="umschalter">
-          <button id="zeig-rahmen" class="aktiv">Im Rahmen</button>
-          <button id="zeig-motiv">Nur Motiv</button>
-        </div>
+        <input id="kommentar" class="kommentar" maxlength="1000" placeholder="Kommentar (freiwillig), dann Note tippen">
         <div class="noten" role="radiogroup" aria-label="Note von 1 bis 5"></div>
-        <textarea id="kommentar" maxlength="1000" placeholder="Was gefällt dir, was nicht? Wo würdest du es aufhängen?"></textarea>
-        <div class="bew-knoepfe">
-          <button id="senden" class="knopf" disabled>Abstimmen</button>
-        </div>
-        <div id="ergebnis" class="ergebnis" hidden>
-          <p class="klein">So haben die anderen abgestimmt</p>
-          <p id="erg-text"></p>
-          <div id="erg-balken"></div>
-          <button id="erg-weiter" class="knopf breit">Weiter zum nächsten Motiv</button>
-        </div>
+        <p class="hinweis">1 = sehr gut, 5 = gar nicht · ein Tipp genügt</p>
         <p id="meldung" class="klein meldung"></p>
       </div>
     </article>
@@ -134,8 +132,8 @@
     <span class="marke-klein"></span> · Prototyp <span id="modus-info"></span>
   </footer>
 
-  <script src="config.js?v=3"></script>
-  <script src="produkte.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="config.js?v=4"></script>
+  <script src="produkte.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
