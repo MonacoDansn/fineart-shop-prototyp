@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fine Art Prints · Prototyp</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="banner">Prototyp · noch kein echter Verkauf · <button class="link" data-modus="bewerten">Hilf mit: Motive bewerten</button></div>
+
+  <header class="kopf">
+    <a class="marke" href="#" data-modus="shop"></a>
+    <nav>
+      <button data-modus="shop" class="aktiv">Kollektion</button>
+      <button data-modus="bewerten">Bewerten</button>
+      <button data-modus="ueber">Über</button>
+    </nav>
+  </header>
+
+  <!-- SHOP -->
+  <main id="shop" class="ansicht">
+    <section class="held">
+      <div class="held-text">
+        <p class="klein">Neue Kollektion</p>
+        <h1>Kunst, die sich<br><em>nicht benimmt.</em></h1>
+        <p class="untertitel"></p>
+        <button class="knopf" data-modus="bewerten">Jetzt Motive bewerten</button>
+      </div>
+      <img class="held-bild" alt="">
+    </section>
+
+    <div class="filter">
+      <button class="aktiv" data-filter="alle">Alle</button>
+      <button data-filter="Motivation">Motivation</button>
+      <button data-filter="Damals & Anders">Damals &amp; Anders</button>
+      <button data-filter="After Dark">After Dark <span class="ab18">18+</span></button>
+      <span class="trenner"></span>
+      <button data-stil="Fotografie">Fotografie</button>
+      <button data-stil="Illustration">Illustration</button>
+    </div>
+
+    <section id="raster" class="raster"></section>
+  </main>
+
+  <!-- BEWERTEN -->
+  <main id="bewerten" class="ansicht" hidden>
+    <div class="bew-kopf">
+      <h2>Wie gefällt dir das Motiv?</h2>
+      <p>Gib jedem Bild eine Note wie in der Schule. Würdest du es aufhängen oder verschenken? Ein kurzer Kommentar hilft sehr.</p>
+      <label class="namensfeld">Dein Vorname (freiwillig) <input id="name" maxlength="60" autocomplete="given-name"></label>
+      <div class="fortschritt"><div id="balken"></div></div>
+      <p id="zaehler" class="klein"></p>
+    </div>
+
+    <article id="karte" class="bew-karte">
+      <div class="bew-bild"><img id="bew-img" alt=""></div>
+      <div class="bew-seite">
+        <p class="klein" id="bew-linie"></p>
+        <h3 id="bew-titel"></h3>
+        <div class="umschalter">
+          <button id="zeig-rahmen" class="aktiv">Im Rahmen</button>
+          <button id="zeig-motiv">Nur Motiv</button>
+        </div>
+        <div class="noten" role="radiogroup" aria-label="Note von 1 bis 5"></div>
+        <textarea id="kommentar" maxlength="1000" placeholder="Was gefällt dir, was nicht? Wo würdest du es aufhängen?"></textarea>
+        <div class="bew-knoepfe">
+          <button id="zurueck" class="knopf hell">Zurück</button>
+          <button id="ueberspringen" class="knopf hell">Überspringen</button>
+          <button id="senden" class="knopf" disabled>Speichern &amp; weiter</button>
+        </div>
+        <p id="meldung" class="klein meldung"></p>
+      </div>
+    </article>
+
+    <section id="fertig" class="fertig" hidden>
+      <h2>Danke dir!</h2>
+      <p>Du hast alle Motive gesehen. Deine Bewertungen sind gespeichert.</p>
+      <button class="knopf" data-modus="shop">Zurück zur Kollektion</button>
+    </section>
+  </main>
+
+  <!-- ÜBER -->
+  <main id="ueber" class="ansicht" hidden>
+    <section class="text">
+      <h2>Über dieses Projekt</h2>
+      <p>Eine kleine Marke für Fine Art Wandbilder: klassische Szenen mit einem frechen Bruch und einem Satz, der hängen bleibt. Für Wohnung, Büro und Eingang.</p>
+      <p>Das hier ist ein Prototyp. Es wird noch nichts verkauft. Deine Bewertung entscheidet mit, welche Motive in die erste Kollektion kommen.</p>
+      <p class="klein">Die Motive wurden mit Unterstützung von KI erstellt und von Hand ausgewählt und nachbearbeitet.</p>
+    </section>
+  </main>
+
+  <!-- PRODUKT -->
+  <dialog id="produkt">
+    <button class="schliessen" aria-label="Schließen">×</button>
+    <div class="produkt-inhalt">
+      <div class="produkt-bilder">
+        <img id="p-bild" alt="">
+        <div class="mini">
+          <button id="p-rahmen"><img alt="Im Rahmen"></button>
+          <button id="p-motiv"><img alt="Nur Motiv"></button>
+        </div>
+      </div>
+      <div class="produkt-info">
+        <p class="klein" id="p-linie"></p>
+        <h2 id="p-titel"></h2>
+        <p class="preis" id="p-preis"></p>
+        <p class="klein">Größe</p>
+        <div class="groessen" id="p-groessen"></div>
+        <p class="klein">Rahmen</p>
+        <div class="groessen" id="p-rahmenwahl">
+          <button class="aktiv">Schwarz</button><button>Eiche</button><button>Ohne</button>
+        </div>
+        <button class="knopf breit" disabled>In den Warenkorb (bald)</button>
+        <button class="knopf hell breit" id="p-bewerten">Dieses Motiv bewerten</button>
+        <ul class="details">
+          <li>Fine Art Druck auf 310 g Baumwollpapier, matt</li>
+          <li>Mit Passepartout, Rahmen aus Massivholz</li>
+          <li>Druck in limitierter Auflage, nummeriert</li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="fuss">
+    <span class="marke-klein"></span> · Prototyp <span id="modus-info"></span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="produkte.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

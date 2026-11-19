@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auswertung · Prototyp</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .aw { max-width: 1100px; margin: 0 auto; padding: 40px 16px 80px; }
+    .aw h1 { font-family: var(--serif); font-weight: 400; font-size: 40px; margin: 0 0 6px; }
+    .zeile-aw { display: grid; grid-template-columns: 110px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--linie); }
+    .zeile-aw img { width: 110px; }
+    .zeile-aw h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; margin: 0; }
+    .verteilung { display: flex; gap: 10px; font-size: 13px; color: var(--grau); margin: 4px 0 8px; flex-wrap: wrap; }
+    .note-gross { font-size: 15px; font-weight: 600; color: var(--tinte); }
+    .komm { font-size: 14px; margin: 4px 0; }
+    .komm b { font-weight: 500; }
+    .sortierung { display: flex; gap: 8px; margin: 18px 0; flex-wrap: wrap; }
+    .sortierung button { background: none; border: 1px solid var(--linie); padding: 6px 12px; font-size: 12px; }
+    .sortierung button.aktiv { border-color: var(--tinte); }
+  </style>
+</head>
+<body>
+  <main class="aw">
+    <p class="klein">Nur für dich</p>
+    <h1>Auswertung der Bewertungen</h1>
+    <p id="info" class="klein"></p>
+    <div class="sortierung">
+      <button data-s="schnitt" class="aktiv">Beste Note zuerst</button>
+      <button data-s="anzahl">Meiste Stimmen</button>
+      <button data-s="id">Nach Nummer</button>
+    </div>
+    <div id="liste"></div>
+  </main>
+  <script src="config.js"></script>
+  <script src="produkte.js"></script>
+  <script>
+  (async () => {
+    const C = window.SHOP_CONFIG, P = window.PRODUKTE;
+    const GES = ["", "😍", "🙂", "😐", "🙁", "😖"];
+    let daten = [];
+    if (C.supabaseUrl && C.supabaseAnonKey) {
+      const r = await fetch(`${C.supabaseUrl}/rest/v1/bewertungen?select=*&order=erstellt_am.desc&limit=5000`,
+        { headers: { apikey: C.supabaseAnonKey, Authorization: `Bearer ${C.supabaseAnonKey}` } });
+      daten = await r.json();
+      document.getElementById("info").textContent = `${daten.length} Bewertungen von ${new Set(daten.map(d => d.name || "anonym")).size} Personen (Namen, sofern angegeben)`;
+    } else {
+      try { daten = JSON.parse(localStorage.getItem("bewertungen_lokal")) || []; } catch { daten = []; }
+      document.getElementById("info").textContent = "Supabase ist noch nicht eingerichtet, angezeigt werden nur Bewertungen aus diesem Browser.";
+    }
+    const pro = P.map(p => {
+      const d = daten.filter(x => x.motiv_id === p.id);
+      const schnitt = d.length ? d.reduce((s, x) => s + x.note, 0) / d.length : 99;
+      return { p, d, schnitt, anzahl: d.length };
+    });
+    function zeichne(s) {
+      const l = [...pro].sort((a, b) => s === "schnitt" ? a.schnitt - b.schnitt : s === "anzahl" ? b.anzahl - a.anzahl : a.p.id.localeCompare(b.p.id, undefined, { numeric: true }));
+      const box = document.getElementById("liste");
+      box.innerHTML = "";
+      for (const { p, d, schnitt } of l) {
+        const z = document.createElement("div");
+        z.className = "zeile-aw";
+        const vert = [1, 2, 3, 4, 5].map(n => `${GES[n]} ${n}: ${d.filter(x => x.note === n).length}`).join(" · ");
+        z.innerHTML = `<img src="${p.rahmen}" alt=""><div><h3></h3>
+          <div class="verteilung"><span class="note-gross">${d.length ? "Ø " + schnitt.toFixed(2).replace(".", ",") : "noch keine Note"}</span><span>${d.length} Stimmen</span><span>${vert}</span></div>
+          <div class="kommentare"></div></div>`;
+        z.querySelector("h3").textContent = `${p.id} · ${p.titel}`;
+        for (const x of d.filter(x => x.kommentar)) {
+          const k = document.createElement("p");
+          k.className = "komm";
+          k.innerHTML = `<b></b> `;
+          k.querySelector("b").textContent = `${GES[x.note]} ${x.name || "anonym"}:`;
+          k.append(document.createTextNode(x.kommentar));
+          z.querySelector(".kommentare").append(k);
+        }
+        box.append(z);
+      }
+    }
+    document.querySelectorAll(".sortierung button").forEach(b => b.onclick = () => {
+      document.querySelectorAll(".sortierung button").forEach(x => x.classList.toggle("aktiv", x === b));
+      zeichne(b.dataset.s);
+    });
+    zeichne("schnitt");
+  })();
+  </script>
+</body>
+</html>
