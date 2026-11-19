@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <div class="banner">Prototyp · noch kein echter Verkauf · <button class="link" data-modus="bewerten">Hilf mit: Motive bewerten</button></div>
@@ -69,9 +69,13 @@
         <div class="noten" role="radiogroup" aria-label="Note von 1 bis 5"></div>
         <textarea id="kommentar" maxlength="1000" placeholder="Was gefällt dir, was nicht? Wo würdest du es aufhängen?"></textarea>
         <div class="bew-knoepfe">
-          <button id="zurueck" class="knopf hell">Zurück</button>
-          <button id="ueberspringen" class="knopf hell">Überspringen</button>
-          <button id="senden" class="knopf" disabled>Speichern &amp; weiter</button>
+          <button id="senden" class="knopf" disabled>Abstimmen</button>
+        </div>
+        <div id="ergebnis" class="ergebnis" hidden>
+          <p class="klein">So haben die anderen abgestimmt</p>
+          <p id="erg-text"></p>
+          <div id="erg-balken"></div>
+          <button id="erg-weiter" class="knopf breit">Weiter zum nächsten Motiv</button>
         </div>
         <p id="meldung" class="klein meldung"></p>
       </div>
@@ -116,7 +120,7 @@
           <button class="aktiv">Schwarz</button><button>Eiche</button><button>Ohne</button>
         </div>
         <button class="knopf breit" disabled>In den Warenkorb (bald)</button>
-        <button class="knopf hell breit" id="p-bewerten">Dieses Motiv bewerten</button>
+        <button class="knopf hell breit" id="p-bewerten">Motive bewerten</button>
         <ul class="details">
           <li>Fine Art Druck auf 310 g Baumwollpapier, matt</li>
           <li>Mit Passepartout, Rahmen aus Massivholz</li>
@@ -130,8 +134,8 @@
     <span class="marke-klein"></span> · Prototyp <span id="modus-info"></span>
   </footer>
 
-  <script src="config.js?v=2"></script>
-  <script src="produkte.js?v=2"></script>
-  <script src="app.js?v=2"></script>
+  <script src="config.js?v=3"></script>
+  <script src="produkte.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

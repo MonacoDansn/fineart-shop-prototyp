@@ -93,7 +93,7 @@
         </div>
         <h3></h3>
         <div class="zeile"><span>${p.stil} · ${p.linie}</span><span>ab ${euro(ab)}</span></div>
-        ${s ? `<div class="schnitt">Ø Note ${Number(s.schnitt).toFixed(1).replace(".", ",")} aus ${s.anzahl}</div>` : ""}`;
+        ${s && erledigt.has(p.id) ? `<div class="schnitt">Ø Note ${Number(s.schnitt).toFixed(1).replace(".", ",")} aus ${s.anzahl} · deine Stimme ist dabei</div>` : ""}`;
       $(".rahmen", b).src = p.rahmen;
       $(".motiv", b).src = p.motiv;
       $(".rahmen", b).alt = p.titel;
@@ -133,7 +133,7 @@
       g.append(b);
     });
     $("#p-preis").textContent = euro(C.preise[1].preis);
-    $("#p-bewerten").onclick = () => { dlg.close(); zeige("bewerten"); springeZu(p.id); };
+    $("#p-bewerten").onclick = () => { dlg.close(); zeige("bewerten"); };
     dlg.showModal();
   }
   $$("#p-rahmenwahl button").forEach(b => b.addEventListener("click", () => {
@@ -199,7 +199,6 @@
     gewaehlt = null;
     $$(".note").forEach(b => b.setAttribute("aria-checked", "false"));
     $("#senden").disabled = true;
-    $("#zurueck").disabled = pos === 0;
     // nächstes Bild vorladen
     const n = P.find(x => x.id === reihe[pos + 1]);
     if (n) new Image().src = n.rahmen;
@@ -216,8 +215,45 @@
     zeigeKarte();
     $("#karte").scrollIntoView({ behavior: "smooth", block: "start" });
   }
-  $("#ueberspringen").addEventListener("click", weiter);
-  $("#zurueck").addEventListener("click", () => { pos = Math.max(0, pos - 1); zeigeKarte(); });
+  // Erst nach der eigenen Stimme: so haben die anderen abgestimmt
+  async function zeigeErgebnis(id, meine) {
+    let noten = [];
+    if (ONLINE) {
+      try { noten = (await api(`bewertungen?select=note&motiv_id=eq.${encodeURIComponent(id)}&limit=5000`)).map(r => r.note); }
+      catch (e) { console.warn(e); }
+      const i = noten.indexOf(meine);        // die eigene Stimme herausnehmen
+      if (i !== -1) noten.splice(i, 1);
+    }
+    const box = $("#ergebnis");
+    const zahl = n => n.toFixed(1).replace(".", ",");
+    if (!noten.length) {
+      $("#erg-text").textContent = ONLINE ? "Du bist die erste Stimme für dieses Motiv." : "Der Vergleich mit anderen erscheint, sobald die Bewertungen online gespeichert werden.";
+      $("#erg-balken").innerHTML = "";
+    } else {
+      const schnitt = noten.reduce((a, b) => a + b, 0) / noten.length;
+      const g = NOTEN[Math.round(schnitt) - 1];
+      $("#erg-text").innerHTML = `Deine Note: <b>${meine}</b> ${NOTEN[meine - 1].g} &nbsp;·&nbsp; Die anderen im Schnitt: <b>${zahl(schnitt)}</b> ${g.g} <span class="klein-text">(${noten.length} ${noten.length === 1 ? "Stimme" : "Stimmen"})</span>`;
+      const max = Math.max(...NOTEN.map(x => noten.filter(n => n === x.n).length), 1);
+      $("#erg-balken").innerHTML = NOTEN.map(x => {
+        const c = noten.filter(n => n === x.n).length;
+        return `<div class="erg-zeile${x.n === meine ? " meine" : ""}"><span>${x.g} ${x.n}</span><div class="erg-spur"><div style="width:${(c / max) * 100}%"></div></div><span>${c}</span></div>`;
+      }).join("");
+    }
+    $(".noten").hidden = true;
+    $("#kommentar").hidden = true;
+    $(".bew-knoepfe").hidden = true;
+    box.hidden = false;
+    $("#meldung").textContent = "";
+    $("#erg-weiter").focus();
+  }
+  $("#erg-weiter").addEventListener("click", () => {
+    $("#ergebnis").hidden = true;
+    $(".noten").hidden = false;
+    $("#kommentar").hidden = false;
+    $(".bew-knoepfe").hidden = false;
+    ladeSchnitte();
+    weiter();
+  });
 
   $("#senden").addEventListener("click", async () => {
     if (!gewaehlt) return;
@@ -234,7 +270,7 @@
       });
       erledigt.add(id);
       lager.schreib("erledigt", [...erledigt]);
-      weiter();
+      await zeigeErgebnis(id, gewaehlt);
     } catch (e) {
       console.error(e);
       $("#meldung").textContent = "Speichern hat nicht geklappt. Bitte nochmal versuchen.";
@@ -243,8 +279,9 @@
   });
   document.addEventListener("keydown", e => {
     if ($("#bewerten").hidden || e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+    if (!$("#ergebnis").hidden) { if (e.key === "Enter") { e.preventDefault(); $("#erg-weiter").click(); } return; }
     if (e.key >= "1" && e.key <= "5") waehle(Number(e.key));
-    if (e.key === "Enter" && gewaehlt) $("#senden").click();
+    if (e.key === "Enter" && gewaehlt && !$("#senden").disabled) $("#senden").click();
   });
 
   // ---------- Start ----------

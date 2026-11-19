@@ -111,3 +111,13 @@ textarea { width: 100%; min-height: 96px; border: 1px solid var(--linie); backgr
   .note .wort { display: none; }
   .bew-knoepfe #senden { width: 100%; margin-left: 0; order: -1; }
 }
+
+/* Ergebnis nach der eigenen Stimme */
+.ergebnis { border: 1px solid var(--linie); background: #fff; padding: 18px; margin-top: 6px; }
+.ergebnis #erg-text { font-size: 16px; margin: 8px 0 14px; }
+.klein-text { font-size: 12px; color: var(--grau); }
+.erg-zeile { display: grid; grid-template-columns: 52px 1fr 28px; gap: 10px; align-items: center; font-size: 14px; margin: 4px 0; }
+.erg-spur { height: 10px; background: var(--papier); }
+.erg-spur div { height: 100%; background: var(--grau); }
+.erg-zeile.meine .erg-spur div { background: var(--gold); }
+.erg-zeile.meine span:first-child { font-weight: 600; }
