@@ -3,7 +3,7 @@
 // Supabase > Project Settings > API hier eintragen. Der anon Schlüssel ist für
 // den Browser gedacht und darf öffentlich sein; geschützt wird über die Regeln in supabase.sql.
 window.SHOP_CONFIG = {
-  marke: "GILT & GRIT",          // Arbeitstitel, später durch den echten Markennamen ersetzen
+  marke: "GILT & GRIT",          // Markenname (vorerst)
   untertitel: "Fine Art Prints mit Haltung",
   supabaseUrl: "https://mdljgzcbrvppvqdhlhnz.supabase.co",
   supabaseAnonKey: "sb_publishable_71cq5GJkq5AwPPAJ2Dnyvg_kCBfVZMk",  // öffentlicher Schlüssel
